@@ -2,7 +2,7 @@
  * Script: Performs cell detection on the root node annotation for both AF647 and DAPI channels,
  * calculates cell counts, fractions, area of AF647 cells, total region area, and mean intensity
  * separately for left and right brain regions, and writes results to a single CSV file.
- * Original Authors: Mick de Koning (cell detection), Modified and Combined: March 10, 2025
+ * Authors: Mick de Koning March 10, 2025
  * 
  * This version works with ABBA-aligned brain regions and splits measurements
  * within each region into left and right hemispheres based on the midline position.
