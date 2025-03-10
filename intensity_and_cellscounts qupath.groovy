@@ -225,7 +225,17 @@ def imageName = server.getMetadata().getName().replaceAll('\\.\\w+$', '')
 // Determine the desktop path dynamically
 def userHome = System.getProperty("user.home")
 def desktopPath = new File(userHome, "Desktop")
-def outputFile = new File(desktopPath, imageName + '_combined_measurements.csv')
+def outputFile = new File(desktopPath, imageName + '_cellcount_intesity.csv')
+
+// Helper function to properly format CSV fields (escaping commas in region names)
+def formatCSVField = { field ->
+    // Check if the field contains commas, quotes, or newlines
+    if (field ==~ /.*[,"\n].*/) {
+        // Escape any quotes by doubling them and enclose in quotes
+        return '"' + field.replaceAll('"', '""') + '"'
+    }
+    return field
+}
 
 // Write all measurements to a single CSV file
 outputFile.withWriter { writer ->
@@ -237,7 +247,10 @@ outputFile.withWriter { writer ->
             def fractionAF647 = totalCount > 0 ? data['countAF647'] / totalCount : 0
             def fractionDAPI = totalCount > 0 ? data['countDAPI'] / totalCount : 0
             
-            writer.println("${regionName},${hemisphere},${data['countAF647']},${data['countDAPI']},${fractionAF647},${fractionDAPI},${data['areaAF647']},${data['areaTotal']},${data['intensityAF647']}")
+            // Format the region name to handle commas properly
+            def escapedRegionName = formatCSVField(regionName)
+            
+            writer.println("${escapedRegionName},${hemisphere},${data['countAF647']},${data['countDAPI']},${fractionAF647},${fractionDAPI},${data['areaAF647']},${data['areaTotal']},${data['intensityAF647']}")
         }
     }
 }
